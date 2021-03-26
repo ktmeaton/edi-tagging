@@ -152,9 +152,9 @@ def main(
             for course in data_dict:
                 for concept in data_dict[course]:
                     if node == concept:
-                        node_attr["concept_num"][node] = 1
                         node_attr["size"][node] = len(data_dict[course][node]) * base_size
                         node_attr["color"][node] = concept_color
+                        node_attr["concept_num"][node] = 1                        
                         node_attr["kw_num"][node] = count_elements(data_dict[course][node])
                         break
 
