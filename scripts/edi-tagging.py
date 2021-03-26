@@ -108,9 +108,18 @@ def main(
     # Create network graph
 
     # Start with an empty undirected graph
-    G = nx.Graph(data_dict)
+    G = nx.Graph()
 
+    # Or add 1 level dict
+    #G = nx.Graph(data_dict)
 
+    for course in data_dict.keys():
+        for concept in data_dict[course].keys():
+            for keyword in data_dict[course][concept].keys():
+                G.add_edge(course, concept)
+                G.add_edge(concept, keyword)
+
+ 
     # Use the boken accessory function
     gr = from_networkx(G, nx.spring_layout, scale=1, center=(0, 0))
     #gr = from_networkx(G, nx.shell_layout, center=(0, 0))
@@ -121,12 +130,13 @@ def main(
     node_attr = {}
     base_size = 10
 
-    concept_color = Category10[4][0]
-    course_color = Category10[4][1]
+    keyword_color = Category10[4][0]
+    concept_color = Category10[4][1]
+    course_color = Category10[4][2]
 
     # Initialize default values for nodes
     node_attr["size"] = {node_name: base_size for node_name in G.nodes}
-    node_attr["color"] = {node_name: concept_color for node_name in G.nodes}
+    node_attr["color"] = {node_name: keyword_color for node_name in G.nodes}
     node_attr["concept_num"] = {node_name: 0 for node_name in G.nodes}
     node_attr["kw_num"] = {node_name: 0 for node_name in G.nodes}
 
@@ -137,6 +147,16 @@ def main(
             node_attr["size"][node] = len(data_dict[node]) * base_size
             node_attr["concept_num"][node] = len(data_dict[node])
             node_attr["kw_num"][node] = count_elements(data_dict[node])
+        # Check if it's a concept
+        else:
+            for course in data_dict:
+                for concept in data_dict[course]:
+                    if node == concept:
+                        node_attr["concept_num"][node] = 1
+                        node_attr["size"][node] = len(data_dict[course][node]) * base_size
+                        node_attr["color"][node] = concept_color
+                        node_attr["kw_num"][node] = count_elements(data_dict[course][node])
+                        break
 
     # gr.node_renderer.data_source.data is a dictionary
     gr.node_renderer.data_source.data['size'] = list(node_attr["size"].values())
@@ -153,7 +173,7 @@ def main(
     # Plotting    
 
     # Plot setup
-    plot = Plot(plot_width=720, plot_height=480)
+    plot = Plot(plot_width=1280, plot_height=720)
     plot.title.text = "EDI Tagging | Department of History | Fall 2020"
     node_hover_tool = HoverTool(tooltips=[
         ("Name", "@index"), 

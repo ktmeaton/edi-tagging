@@ -1,5 +1,5 @@
 Concept	Keywords
-Critical	critical,evaluate,
+Critical	critical,evaluate
 Culture	culture,cultural
 Race	race,racial,ethnicity,slavery
 Social Justice	justice,activism
