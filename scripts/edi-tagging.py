@@ -173,7 +173,7 @@ def main(
     # Plotting    
 
     # Plot setup
-    plot = Plot(plot_width=1280, plot_height=720)
+    plot = Plot(plot_width=600, plot_height=400)
     plot.title.text = "EDI Tagging | Department of History | Fall 2020"
     node_hover_tool = HoverTool(tooltips=[
         ("Name", "@index"), 
